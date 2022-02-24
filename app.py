@@ -1,4 +1,4 @@
-import gradio as gr
+import streamlit as st
 import pandas as pd
 import numpy as np
 
@@ -46,8 +46,29 @@ def income_predict(age, working_class, final_weight, education, marital_status, 
     return "Income is " + str(pred.loc[0, 'Label']) + " with score of " + str(round(pred.loc[0, 'Score'] * 100, 2)) + "%"
 
 
-gr.Interface(income_predict, inputs=[
-    "number", gr.inputs.Dropdown(workclass_list), "number", gr.inputs.Dropdown(education_list), 
-    gr.inputs.Dropdown(marital_list, type="index"), gr.inputs.Dropdown(occupation_list), gr.inputs.Dropdown(relationship_list), 
-    gr.inputs.Dropdown(sex_list), "number", "number", "number"], 
-    outputs="text").launch()
+def main():
+    st.title("Income Prediction App using PyCaret")
+    st.text("This app predicts if the income is more than 50k or less than 50k")
+    st.text("")
+
+    age = st.number_input("Age", min_value=0, max_value=100)
+    working_class = st.selectbox("Working Class", workclass_list)
+    final_weight = st.number_input("Final Weight", min_value=1)
+    education = st.selectbox("Education", education_list)
+    marital_status = st.selectbox("Marital Status", marital_list)
+    occupation = st.selectbox("Occupation", occupation_list)
+    relationship = st.selectbox("Relationship", relationship_list)
+    sex = st.selectbox("Sex", sex_list)
+    gain = st.number_input("Capital Gain", min_value=0)
+    loss = st.number_input("Capital Loss", min_value=0)
+    hours = st.number_input("Hours Per Week", min_value=1)
+
+    res = ""
+
+    if st.button("Predict"):
+        res = income_predict(age, working_class, final_weight, education, marital_status, occupation, relationship, sex, gain, loss, hours)
+
+        st.success(res)
+
+if __name__ == '__main__':
+    main()
