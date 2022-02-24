@@ -6,6 +6,9 @@ from pycaret.classification import *
 
 df = pd.read_csv("adult_trimmed.csv")
 
+feats_cols = df.columns.tolist()
+feats_cols.remove("income")
+
 model = load_model('Income Prediction Model')
 
 # List of unique features in workclass column in df
@@ -26,14 +29,23 @@ relationship_list = df['relationship'].unique().tolist()
 
 sex_list = ["Male", "Female"]
 
+print(df.iloc[1, :])
+
 def income_predict(age, working_class, final_weight, education, marital_status, occupation, relationship, sex, capital_gain, capital_loss, hours_per_week):
     feats = [age, working_class, final_weight, education, marital_status, occupation, relationship, sex, capital_gain, capital_loss, hours_per_week]
 
     feats_s = pd.Series(feats)
+    feats_s = feats_s.values
+    feats_s = feats_s.reshape(1, -1)
 
-    print(feats_s)
+    # Convert feats_s into Pandas Data Frame
+    feats_df = pd.DataFrame(feats_s, columns=feats_cols)
 
-    return "foo"
+    #print(feats_df.iloc[0, :])
+
+    pred = predict_model(model, data=feats_df)
+
+    return "Income is " + str(pred.loc[0, 'Label']) + " with score of " + str(pred.loc[0, 'Score'] * 100) + "%"
 
 
 gr.Interface(income_predict, inputs=[
