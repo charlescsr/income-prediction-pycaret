@@ -4,6 +4,18 @@ import numpy as np
 
 from pycaret.classification import *
 
+final_weight_desc = """
+#### The weights on the Current Population Survey (CPS) files are controlled to independent estimates of the civilian noninstitutional population of the US. These are prepared monthly for us by Population Division here at the Census Bureau. We use 3 sets of controls. These are:
+
+* #### A single cell estimate of the population 16+ for each state.
+
+* #### Controls for Hispanic Origin by age and sex.
+
+* #### Controls by Race, age and sex.
+
+#### We use all three sets of controls in our weighting program and "rake" through them 6 times so that by the end we come back to all the controls we used. The term estimate refers to population totals derived from CPS by creating "weighted tallies" of any specified socio-economic characteristics of the population. People with similar demographic characteristics should have similar weights. There is one important caveat to remember about this statement. That is that since the CPS sample is actually a collection of 51 state samples, each with its own probability of selection, the statement only applies within state.
+"""
+
 df = pd.read_csv("adult_trimmed.csv")
 
 feats_cols = df.columns.tolist()
@@ -48,8 +60,10 @@ def income_predict(age, working_class, final_weight, education, marital_status, 
 
 def main():
     st.title("Income Prediction App using PyCaret")
-    st.text("This app predicts if the income is more than 50k or less than 50k")
+    st.markdown("**This app predicts if the income is more than 50k or less than 50k based on the provided parameters**")
     st.text("")
+    st.header("Description of final weight")
+    st.markdown(final_weight_desc)
 
     age = st.number_input("Age", min_value=0, max_value=100)
     working_class = st.selectbox("Working Class", workclass_list)
