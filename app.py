@@ -29,7 +29,6 @@ relationship_list = df['relationship'].unique().tolist()
 
 sex_list = ["Male", "Female"]
 
-print(df.iloc[1, :])
 
 def income_predict(age, working_class, final_weight, education, marital_status, occupation, relationship, sex, capital_gain, capital_loss, hours_per_week):
     feats = [age, working_class, final_weight, education, marital_status, occupation, relationship, sex, capital_gain, capital_loss, hours_per_week]
@@ -41,11 +40,10 @@ def income_predict(age, working_class, final_weight, education, marital_status, 
     # Convert feats_s into Pandas Data Frame
     feats_df = pd.DataFrame(feats_s, columns=feats_cols)
 
-    #print(feats_df.iloc[0, :])
-
     pred = predict_model(model, data=feats_df)
 
-    return "Income is " + str(pred.loc[0, 'Label']) + " with score of " + str(pred.loc[0, 'Score'] * 100) + "%"
+    # Return the predicted income and score rounded to 2 decimal places
+    return "Income is " + str(pred.loc[0, 'Label']) + " with score of " + str(round(pred.loc[0, 'Score'] * 100, 2)) + "%"
 
 
 gr.Interface(income_predict, inputs=[
