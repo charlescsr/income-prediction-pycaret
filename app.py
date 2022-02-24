@@ -1,5 +1,6 @@
 import gradio as gr
 import pandas as pd
+import numpy as np
 
 from pycaret.classification import *
 
@@ -9,6 +10,7 @@ model = load_model('Income Prediction Model')
 
 # List of unique features in workclass column in df
 workclass_list = df['workclass'].unique().tolist()
+workclass_list.remove(np.nan)
 
 # List of unique features in education column in df
 education_list = df['education'].unique().tolist()
@@ -17,6 +19,7 @@ marital_list = ["Single", "Married"]
 
 # List of unique features in occupation column in df
 occupation_list = df['occupation'].unique().tolist()
+occupation_list.remove(np.nan)
 
 # List of unique features in relationship column in df
 relationship_list = df['relationship'].unique().tolist()
